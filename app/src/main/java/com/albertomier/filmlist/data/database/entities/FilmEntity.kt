@@ -19,4 +19,5 @@ data class FilmEntity(
     @ColumnInfo(name = "popular") var popular: Boolean = false
 )
 
-fun Film.toDatabase() = FilmEntity(id, originalTitle, overview, title, posterPath, releaseDate, voteAverage, fav)
+fun Film.toDatabase() =
+    FilmEntity(id, originalTitle, overview, title, posterPath, releaseDate, voteAverage, fav)

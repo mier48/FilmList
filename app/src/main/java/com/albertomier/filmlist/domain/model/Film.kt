@@ -14,5 +14,8 @@ data class Film(
     var fav: Boolean
 )
 
-fun FilmModel.toDomain() = Film(id, originalTitle, overview, title, posterPath, releaseDate, voteAverage, fav)
-fun FilmEntity.toDomain() = Film(id, originalTitle, overview, title, posterPath, releaseDate, voteAverage, fav)
+fun FilmModel.toDomain() =
+    Film(id, originalTitle, overview, title, posterPath, releaseDate, voteAverage, fav)
+
+fun FilmEntity.toDomain() =
+    Film(id, originalTitle, overview, title, posterPath, releaseDate, voteAverage, fav)

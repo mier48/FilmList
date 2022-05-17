@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.albertomier.filmlist.domain.AddFilmToFavorite
 import com.albertomier.filmlist.domain.GetFavoritesFilms
-import com.albertomier.filmlist.domain.GetPopularFilms
 import com.albertomier.filmlist.domain.RemoveFilmFromFavorite
 import com.albertomier.filmlist.domain.model.Film
 import dagger.hilt.android.lifecycle.HiltViewModel

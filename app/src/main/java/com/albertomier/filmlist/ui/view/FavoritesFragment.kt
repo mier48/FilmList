@@ -11,11 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.albertomier.filmlist.databinding.FragmentFavoritesBinding
-import com.albertomier.filmlist.databinding.FragmentHomeBinding
 import com.albertomier.filmlist.domain.model.Film
 import com.albertomier.filmlist.ui.adapter.FilmAdapter
 import com.albertomier.filmlist.ui.viewmodel.FavoritesViewModel
-import com.albertomier.filmlist.ui.viewmodel.ListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -45,7 +45,10 @@ class HomeFragment : Fragment() {
             if (binding.filmList.adapter != null) {
                 (binding.filmList.adapter as FilmAdapter).updateReceiptsList(it)
             } else {
-                adapter = FilmAdapter(it, { film -> onFilmSelected(film) }, { film -> addToFavorite(film) })
+                adapter = FilmAdapter(
+                    it,
+                    { film -> onFilmSelected(film) },
+                    { film -> addToFavorite(film) })
                 binding.filmList.adapter = adapter
             }
         })
