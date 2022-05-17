@@ -27,6 +27,7 @@ class HomeFragment : Fragment() {
     private val listViewModel: ListViewModel by viewModels()
 
     lateinit var adapter: FilmAdapter
+    var query: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,14 +67,26 @@ class HomeFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s != null && s.isNotEmpty()) {
-                    listViewModel.byQuery(s.toString().lowercase())
+                    query = s.toString().lowercase()
+                    listViewModel.byQuery(query)
                 } else {
+                    query = ""
                     listViewModel.empty()
                 }
             }
         })
 
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (query.isEmpty()) {
+            listViewModel.onCreate()
+        } else {
+            listViewModel.byQuery(query)
+        }
     }
 
     override fun onDestroyView() {

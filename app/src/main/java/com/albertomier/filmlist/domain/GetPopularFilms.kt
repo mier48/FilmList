@@ -10,15 +10,13 @@ class GetPopularFilms @Inject constructor(private val repository: FilmRepository
     suspend operator fun invoke(): List<Film> {
         val popularFIlms = repository.getPopularFilmFromApi()
 
-        return if (popularFIlms.isNotEmpty()) {
+        if (popularFIlms.isNotEmpty()) {
             val result = popularFIlms.map { it.toDatabase() }
             result.map {
                 it.popular = true
             }
             repository.addFilms(result)
-            popularFIlms
-        } else {
-            repository.getPopularFilmFromDatabase()
         }
+        return repository.getPopularFilmFromDatabase()
     }
 }
