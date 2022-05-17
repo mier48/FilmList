@@ -8,12 +8,17 @@ import javax.inject.Inject
 class GetPopularFilms @Inject constructor(private val repository: FilmRepository) {
 
     suspend operator fun invoke(): List<Film> {
-        val result = repository.getPopularFilmFromApi()
+        val popularFIlms = repository.getPopularFilmFromApi()
 
-        if (result.isNotEmpty()) {
-            repository.addPopularFilm(result.map { it.toDatabase() })
+        return if (popularFIlms.isNotEmpty()) {
+            val result = popularFIlms.map { it.toDatabase() }
+            result.map {
+                it.popular = true
+            }
+            repository.addFilms(result)
+            popularFIlms
+        } else {
+            repository.getPopularFilmFromDatabase()
         }
-
-        return result
     }
 }

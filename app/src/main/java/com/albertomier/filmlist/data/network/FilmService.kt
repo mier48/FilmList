@@ -24,4 +24,10 @@ class FilmService @Inject constructor(private val api: FilmApiClient) {
         }
     }
 
+    suspend fun getFilmsByQuery(query: String): List<FilmModel> {
+        return withContext(Dispatchers.IO) {
+            val response: Response<FilmListResponse> = api.getFilmsByQuery(apiKey, "es", 1, query)
+            response.body()?.results ?: emptyList()
+        }
+    }
 }

@@ -8,7 +8,7 @@ data class Film(
     val originalTitle: String,
     val overview: String,
     val title: String,
-    val posterPath: String,
+    val posterPath: String?,
     val releaseDate: String,
     val voteAverage: Float,
     var fav: Boolean

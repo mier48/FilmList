@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Film List</string>
     <string name="title_home">Inicio</string>
     <string name="title_favorites">Favoritos</string>
+    <string name="searcher_hint">"Busca una película</string>
 </resources>

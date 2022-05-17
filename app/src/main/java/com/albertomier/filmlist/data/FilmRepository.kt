@@ -15,7 +15,6 @@ class FilmRepository @Inject constructor(
 
     suspend fun getPopularFilmFromApi(): List<Film> {
         val response: List<FilmModel> = api.getPopularFilms()
-
         return response.map { it.toDomain() }
     }
 
@@ -29,15 +28,57 @@ class FilmRepository @Inject constructor(
         }
     }
 
+    suspend fun getFilmsByQueryFromApi(query: String): List<Film> {
+        val response: List<FilmModel> = api.getFilmsByQuery(query)
+        return response.map { it.toDomain() }
+    }
+
+    suspend fun getFilmsByQueryFromDatabase(query: String): List<Film> {
+        val response: List<FilmEntity> = filmDao.getFilmsByQuery("%${query}%")
+        return response.map { it.toDomain() }
+    }
+
+    suspend fun getPopularFilmFromDatabase(): List<Film> {
+        val response: List<FilmEntity> = filmDao.getPopularFilms()
+        return response.map { it.toDomain() }
+    }
+
     suspend fun getFilmByIdFromDatabase(id: Int): Film {
         return filmDao.getFilmById(id).toDomain()
     }
 
-    suspend fun addPopularFilm(films: List<FilmEntity>) {
+    suspend fun getFilmsFromDatabase(): List<Film> {
+        val response = filmDao.getAllFilms()
+        return response.map { it.toDomain() }
+    }
+
+    suspend fun getFavoritesFilms(): List<Film> {
+        val response = filmDao.getFavoritesFilms()
+        return response.map { it.toDomain() }
+    }
+
+    suspend fun getFavoriteFilm(id: Int): Film {
+        val response = filmDao.getFavoriteFilm(id)
+        return response.toDomain()
+    }
+
+    suspend fun addFilms(films: List<FilmEntity>) {
         filmDao.insertAll(films)
+    }
+
+    suspend fun addFilm(film: FilmEntity) {
+        filmDao.insert(film)
     }
 
     suspend fun deleteAll() {
         filmDao.deleteAll()
+    }
+
+    suspend fun deleteFilmFromFavorite(filmId: Int) {
+        filmDao.deleteFilmFromFavorite(filmId)
+    }
+
+    suspend fun addFilmToFavorite(filmId: Int) {
+        filmDao.addFilmToFavorite(filmId)
     }
 }

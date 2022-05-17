@@ -2,6 +2,7 @@ package com.albertomier.filmlist.ui.adapter
 
 import android.content.Context
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.albertomier.filmlist.R
@@ -13,7 +14,7 @@ class FilmViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private val binding = FilmBinding.bind(view)
 
-    fun render(film: Film, onClickListener: (Film) -> Unit) {
+    fun render(film: Film, onClickListener: (Film) -> Unit, addToFavoriteListener: (Film) -> Unit) {
         val context: Context = binding.filmImage.context
         val path: String = "https://image.tmdb.org/t/p/w500/${film.posterPath}"
         val placeholder =
@@ -38,8 +39,28 @@ class FilmViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
         }
 
+        if (film.fav) {
+            binding.addToFavorite.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    context,
+                    R.drawable.ic_star
+                )
+            )
+        } else {
+            binding.addToFavorite.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    context,
+                    R.drawable.ic_empty_star
+                )
+            )
+        }
+
         Picasso.get().load(path).centerCrop().placeholder(placeholder!!).fit()
             .into(binding.filmImage)
+
+        binding.addToFavorite.setOnClickListener {
+            addToFavoriteListener(film)
+        }
 
         itemView.setOnClickListener {
             onClickListener(film)

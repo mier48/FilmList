@@ -7,8 +7,9 @@ import com.albertomier.filmlist.R
 import com.albertomier.filmlist.domain.model.Film
 
 class FilmAdapter(
-    private val filmList: List<Film>,
-    private val onClickListener: (Film) -> Unit
+    private var filmList: List<Film>,
+    private val onClickListener: (Film) -> Unit,
+    private val addToFavoriteListener: (Film) -> Unit
 ) : RecyclerView.Adapter<FilmViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmViewHolder {
@@ -18,7 +19,7 @@ class FilmAdapter(
 
     override fun onBindViewHolder(holder: FilmViewHolder, position: Int) {
         val item = filmList[position]
-        holder.render(item, onClickListener)
+        holder.render(item, onClickListener, addToFavoriteListener)
     }
 
     override fun getItemCount(): Int {
@@ -26,5 +27,11 @@ class FilmAdapter(
             return filmList.size
         }
         return 0
+    }
+
+    fun updateReceiptsList(newlist: List<Film>) {
+        filmList = emptyList()
+        filmList = newlist
+        notifyDataSetChanged()
     }
 }

@@ -2,6 +2,8 @@ package com.albertomier.filmlist.ui.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +26,8 @@ class HomeFragment : Fragment() {
 
     private val listViewModel: ListViewModel by viewModels()
 
+    lateinit var adapter: FilmAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,12 +42,32 @@ class HomeFragment : Fragment() {
         listViewModel.onCreate()
 
         listViewModel.listModel.observe(viewLifecycleOwner, Observer {
-            binding.filmList.adapter =
-                FilmAdapter(it) { film -> onFilmSelected(film) }
+            if (binding.filmList.adapter != null) {
+                (binding.filmList.adapter as FilmAdapter).updateReceiptsList(it)
+            } else {
+                adapter = FilmAdapter(it, { film -> onFilmSelected(film) }, { film -> addToFavorite(film) })
+                binding.filmList.adapter = adapter
+            }
         })
 
         listViewModel.isLoading.observe(viewLifecycleOwner, Observer {
             binding.progress.isVisible = it
+        })
+
+        binding.searcherEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s != null && s.isNotEmpty()) {
+                    listViewModel.byQuery(s.toString().lowercase())
+                } else {
+                    listViewModel.empty()
+                }
+            }
         })
 
         return root
@@ -62,6 +86,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun addToFavorite(film: Film) {
-
+        if (film.fav) {
+            listViewModel.deleteFavorite(film.id)
+        } else {
+            listViewModel.addToFavorite(film.id)
+        }
     }
 }

@@ -14,6 +14,7 @@ import com.albertomier.filmlist.databinding.FragmentFavoritesBinding
 import com.albertomier.filmlist.databinding.FragmentHomeBinding
 import com.albertomier.filmlist.domain.model.Film
 import com.albertomier.filmlist.ui.adapter.FilmAdapter
+import com.albertomier.filmlist.ui.viewmodel.FavoritesViewModel
 import com.albertomier.filmlist.ui.viewmodel.ListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +24,7 @@ class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
 
-    private val listViewModel: ListViewModel by viewModels()
+    private val favoritesViewModel: FavoritesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,14 +37,14 @@ class FavoritesFragment : Fragment() {
         val manager = GridLayoutManager(activity, 2)
         binding.filmList.layoutManager = manager
 
-        listViewModel.onCreate()
+        favoritesViewModel.onCreate()
 
-        listViewModel.listModel.observe(viewLifecycleOwner, Observer {
+        favoritesViewModel.listModel.observe(viewLifecycleOwner, Observer {
             binding.filmList.adapter =
-                FilmAdapter(it) { film -> onFilmSelected(film) }
+                FilmAdapter(it, { film -> onFilmSelected(film) }, { film -> addToFavorite(film) })
         })
 
-        listViewModel.isLoading.observe(viewLifecycleOwner, Observer {
+        favoritesViewModel.isLoading.observe(viewLifecycleOwner, Observer {
             binding.progress.isVisible = it
         })
 
@@ -63,6 +64,10 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun addToFavorite(film: Film) {
-
+        if (film.fav) {
+            favoritesViewModel.deleteFavorite(film.id)
+        } else {
+            favoritesViewModel.addToFavorite(film.id)
+        }
     }
 }

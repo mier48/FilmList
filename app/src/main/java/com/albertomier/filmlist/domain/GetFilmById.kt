@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class GetFilmById @Inject constructor(private val repository: FilmRepository) {
 
-    suspend operator fun invoke(id: Int): Film? {
+    suspend operator fun invoke(id: Int): Film {
         var result = repository.getFilmByIdFromApi(id)
 
         if (result == null) {
