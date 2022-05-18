@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import com.albertomier.filmlist.R
 import com.albertomier.filmlist.databinding.ActivityDetailBinding
+import com.albertomier.filmlist.domain.model.Film
 import com.albertomier.filmlist.ui.viewmodel.DetailViewModel
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,10 +69,38 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
 
+                if (it.fav) {
+                    binding.addToFavorite.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            this@DetailActivity,
+                            R.drawable.ic_star
+                        )
+                    )
+                } else {
+                    binding.addToFavorite.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            this@DetailActivity,
+                            R.drawable.ic_empty_star
+                        )
+                    )
+                }
+
                 Picasso.get().load(path).centerCrop().placeholder(placeholder!!).fit()
                     .into(binding.filmImage)
+
+                binding.addToFavorite.setOnClickListener { _ ->
+                    addToFavorite(it)
+                }
             }
         })
+    }
+
+    private fun addToFavorite(film: Film) {
+        if (film.fav) {
+            detailViewModel.deleteFavorite(film.id)
+        } else {
+            detailViewModel.addToFavorite(film.id)
+        }
     }
 
     override fun onBackPressed() {

@@ -12,6 +12,16 @@ class GetFilmsByQuery @Inject constructor(private val repository: FilmRepository
 
         return if (result.isNotEmpty()) {
             repository.addFilms(result.map { it.toDatabase() })
+            val fromDatabase = repository.getFilmsByQueryFromDatabase(query)
+
+            result.map { f ->
+                fromDatabase.forEach { d ->
+                    if (f.id == d.id) {
+                        f.fav = d.fav
+                    }
+                }
+            }
+
             result
         } else {
             repository.getFilmsByQueryFromDatabase(query)
